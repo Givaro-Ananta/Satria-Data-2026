@@ -102,6 +102,7 @@ Satria-Data-2026/
 | 26    | Dashboard historis                               |
 | 27    | Milestone chart 2025–2045                        |
 | 28    | Fan chart proyeksi                               |
+| 29    | Tabel ringkasan                                  |
 
 ---
 
