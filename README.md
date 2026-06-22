@@ -166,7 +166,7 @@ Proyek ini menganalisis **11 komoditas pangan strategis** yang merepresentasikan
 | 3 | **Eggs** *(Telur Ayam)* | Daging, Ikan & Telur | IDR/kg | Indikator utama inflasi pangan; harga relatif stabil dibanding protein lain |
 | 4 | **Meat (beef)** *(Daging Sapi)* | Daging, Ikan & Telur | IDR/kg | Harga tertinggi di antara semua komoditas; dipengaruhi impor |
 | 5 | **Meat (chicken, broiler)** *(Daging Ayam)* | Daging, Ikan & Telur | IDR/kg | Sumber protein hewani terjangkau; sangat sensitif terhadap harga pakan |
-| 6 | **Milk (condensed)** *(Susu Kental Manis)* | Susu & Produk Susu | IDR/385g | Tidak ada data pasar regional — diestimasi dari tren nasional |
+| 6 | **Milk (condensed)** *(Susu Kental Manis)* | Susu & Produk Susu | IDR/370g | Tidak ada data pasar regional — diestimasi dari tren nasional |
 | 7 | **Sugar** *(Gula Pasir)* | Makanan Lainnya | IDR/kg | Disubsidi pemerintah; tren kenaikan signifikan pasca-2022 |
 | 8 | **Oil (vegetable)** *(Minyak Goreng)* | Minyak & Lemak | IDR/liter | Mengalami krisis kelangkaan 2022; harga sangat volatil |
 | 9 | **Chili (red)** *(Cabai Merah)* | Sayur & Buah | IDR/kg | Komoditas paling volatil; sangat dipengaruhi musim dan cuaca |
