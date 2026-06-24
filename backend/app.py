@@ -39,15 +39,7 @@ FORECAST_HORIZON_DEFAULT = 24  # bulan ke depan
 
 app = FastAPI(title="Forecasting Harga Pangan API")
 
-# PENTING: ganti dengan domain Vercel kamu setelah frontend dideploy,
-# lalu commit ulang & redeploy backend ini.
-ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:5500",
-    "https://<nama-project-kamu>.vercel.app",
-]
-
+# Konfigurasi CORS agar frontend dapat mengakses API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
