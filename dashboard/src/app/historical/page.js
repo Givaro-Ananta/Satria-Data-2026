@@ -26,7 +26,7 @@ const COMMODITY_MAP = {
 };
 
 export default function HistoricalPage() {
-  const [apiBaseUrl, setApiBaseUrl] = useState("https://forecasting-pangan-api.onrender.com");
+  const [apiBaseUrl, setApiBaseUrl] = useState(process.env.NEXT_PUBLIC_API_BASE_URL || "https://forecasting-pangan-api.onrender.com");
   const [commodities, setCommodities] = useState([]);
   const [selectedCommodity, setSelectedCommodity] = useState("");
   const [historicalData, setHistoricalData] = useState(null);

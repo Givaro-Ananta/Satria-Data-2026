@@ -31,7 +31,7 @@ const COMMODITY_MAP = {
 
 export default function Home() {
   // Configuration State
-  const [apiBaseUrl, setApiBaseUrl] = useState("https://forecasting-pangan-api.onrender.com");
+  const [apiBaseUrl, setApiBaseUrl] = useState(process.env.NEXT_PUBLIC_API_BASE_URL || "https://forecasting-pangan-api.onrender.com");
   const [connectionStatus, setConnectionStatus] = useState({ type: "info", message: "Menghubungkan..." });
 
   // Automatically switch to local backend if running on localhost

@@ -10,7 +10,7 @@ export default function Navbar() {
   const [connectionStatus, setConnectionStatus] = useState({ type: "info", message: "Menghubungkan..." });
 
   useEffect(() => {
-    let apiBaseUrl = "https://forecasting-pangan-api.onrender.com";
+    let apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://forecasting-pangan-api.onrender.com";
     if (typeof window !== "undefined" && 
        (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
       apiBaseUrl = "http://127.0.0.1:8000";
