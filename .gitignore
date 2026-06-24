@@ -1,0 +1,55 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+backend/venv/
+
+# Python cache & build files
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Node / Next.js dependency & build files
+node_modules/
+.next/
+out/
+build/
+dist/
+dashboard/node_modules/
+dashboard/.next/
+
+# Environment / Secret / Key files
+.env
+.env.local
+.env.*.local
+.env*
+*.pem
+*.key
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Prevent ignoring markdown files
+!*.md
+!**/*.md
+
+# Ignore specific local agent instruction files
+AGENTS.md
+CLAUDE.md
+**/AGENTS.md
+**/CLAUDE.md
