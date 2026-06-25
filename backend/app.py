@@ -51,14 +51,13 @@ ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 def load_base_df() -> pd.DataFrame:
     if not os.path.exists(DATA_FILE):
