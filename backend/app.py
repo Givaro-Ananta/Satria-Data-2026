@@ -24,11 +24,16 @@ from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+import numpy as np
+from prophet import Prophet
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+
 warnings.filterwarnings("ignore")
 logging.getLogger("prophet").setLevel(logging.ERROR)
 logging.getLogger("cmdstanpy").setLevel(logging.ERROR)
 
-from prophet import Prophet
+
 
 # ---------------------------------------------------------------------------
 # SETUP
@@ -63,6 +68,45 @@ def load_base_df() -> pd.DataFrame:
 
 BASE_DF = load_base_df()
 COMMODITIES = list(BASE_DF.columns)
+
+BEST_MODELS = {
+    "Meat (beef)": {
+        "model_type": "ETS",
+        "trend": "add",
+        "seasonal": None,
+        "damped_trend": False
+    },
+    "Eggs": {
+        "model_type": "ETS",
+        "trend": "add",
+        "seasonal": "add",
+        "damped_trend": False
+    },
+    "Meat (chicken, broiler)": {
+        "model_type": "SARIMA",
+        "order": (2, 1, 0),
+        "seasonal_order": (0, 1, 1, 12)
+    },
+    "Sugar": {
+        "model_type": "SARIMA",
+        "order": (2, 1, 0),
+        "seasonal_order": (0, 1, 1, 12)
+    },
+    "Chili (red)": {
+        "model_type": "SARIMA",
+        "order": (2, 1, 1),
+        "seasonal_order": (0, 1, 1, 12)
+    },
+    "Chili (bird's eye)": {
+        "model_type": "Prophet"
+    },
+    "Oil (vegetable)": {
+        "model_type": "Prophet"
+    },
+    "Rice": {
+        "model_type": "Prophet"
+    }
+}
 
 
 class PricePoint(BaseModel):
@@ -136,6 +180,82 @@ def _run_prophet(series: pd.Series, horizon_months: int):
     return hist, fc
 
 
+def _run_ets(series: pd.Series, config: dict, horizon_months: int):
+    # ETS Model
+    model = ExponentialSmoothing(
+        series,
+        trend=config["trend"],
+        seasonal=config["seasonal"],
+        seasonal_periods=12 if config["seasonal"] else None,
+        damped_trend=config["damped_trend"],
+        initialization_method="estimated"
+    )
+    fit_res = model.fit(optimized=True, remove_bias=True)
+    fc_mean = fit_res.forecast(horizon_months).clip(lower=0)
+
+    # Simulate CI
+    resid_std = np.std(fit_res.resid.dropna())
+    fc_lower = []
+    fc_upper = []
+    for i in range(horizon_months):
+        step = i + 1
+        margin = 1.96 * resid_std * np.sqrt(step)
+        val = float(fc_mean.iloc[i])
+        fc_lower.append(max(val - margin, 0))
+        fc_upper.append(val + margin)
+
+    hist_df = pd.DataFrame({"ds": series.index, "value": series.values})
+    future_dates = pd.date_range(
+        start=series.index[-1] + pd.DateOffset(months=1),
+        periods=horizon_months,
+        freq="MS"
+    )
+    fc_df = pd.DataFrame({
+        "ds": future_dates,
+        "value": fc_mean.values,
+        "yhat_lower": fc_lower,
+        "yhat_upper": fc_upper
+    })
+    return hist_df, fc_df
+
+
+def _run_sarima(series: pd.Series, config: dict, horizon_months: int):
+    # SARIMA Model fitted on log-scale
+    log_series = np.log(series)
+    model = SARIMAX(
+        log_series,
+        order=config["order"],
+        seasonal_order=config["seasonal_order"],
+        enforce_stationarity=False,
+        enforce_invertibility=False,
+        trend='n'
+    )
+    fit_res = model.fit(disp=False, maxiter=150, method='lbfgs')
+
+    fc_obj = fit_res.get_forecast(steps=horizon_months)
+    fc_log = fc_obj.predicted_mean
+    fc_ci_log = fc_obj.conf_int(alpha=0.05)
+
+    # Back-transform to normal price scale
+    fc_mean = np.exp(fc_log)
+    fc_lower = np.exp(fc_ci_log.iloc[:, 0])
+    fc_upper = np.exp(fc_ci_log.iloc[:, 1])
+
+    hist_df = pd.DataFrame({"ds": series.index, "value": series.values})
+    future_dates = pd.date_range(
+        start=series.index[-1] + pd.DateOffset(months=1),
+        periods=horizon_months,
+        freq="MS"
+    )
+    fc_df = pd.DataFrame({
+        "ds": future_dates,
+        "value": fc_mean.values,
+        "yhat_lower": fc_lower.values,
+        "yhat_upper": fc_upper.values
+    })
+    return hist_df, fc_df
+
+
 def _format_response(commodity: str, hist: pd.DataFrame, fc: pd.DataFrame):
     return {
         "commodity": commodity,
@@ -161,7 +281,17 @@ def forecast(req: ForecastRequest):
         raise HTTPException(400, f"Komoditas tidak dikenal. Pilihan: {COMMODITIES}")
 
     series = _merge_points(BASE_DF[req.commodity], req.points)
-    hist, fc = _run_prophet(series, req.horizon_months)
+    
+    config = BEST_MODELS.get(req.commodity, {"model_type": "Prophet"})
+    model_type = config.get("model_type", "Prophet")
+
+    if model_type == "ETS":
+        hist, fc = _run_ets(series, config, req.horizon_months)
+    elif model_type == "SARIMA":
+        hist, fc = _run_sarima(series, config, req.horizon_months)
+    else:
+        hist, fc = _run_prophet(series, req.horizon_months)
+
     return _format_response(req.commodity, hist, fc)
 
 
@@ -198,5 +328,15 @@ async def forecast_from_csv(
     ]
 
     series = _merge_points(BASE_DF[commodity], points)
-    hist, fc = _run_prophet(series, horizon_months)
+
+    config = BEST_MODELS.get(commodity, {"model_type": "Prophet"})
+    model_type = config.get("model_type", "Prophet")
+
+    if model_type == "ETS":
+        hist, fc = _run_ets(series, config, horizon_months)
+    elif model_type == "SARIMA":
+        hist, fc = _run_sarima(series, config, horizon_months)
+    else:
+        hist, fc = _run_prophet(series, horizon_months)
+
     return _format_response(commodity, hist, fc)

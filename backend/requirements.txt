@@ -5,3 +5,5 @@ numpy
 prophet
 python-multipart
 openpyxl
+statsmodels
+scipy
