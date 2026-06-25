@@ -59,7 +59,7 @@ Satria-Data-2026/
 
 > 🔗 **Live Demo:** https://satria-data-2026.vercel.app
 
-Aplikasi ini menyediakan antarmuka interaktif premium berbasis web untuk memvisualisasikan data historis dan melakukan prediksi harga pangan secara langsung (*real-time retraining*) menggunakan model Prophet Python di backend.
+Aplikasi ini menyediakan antarmuka interaktif berbasis web untuk memvisualisasikan data historis dan melakukan prediksi harga pangan secara langsung (*real-time retraining*) menggunakan di backend.
 
 ### Fitur Utama:
 1. **Visualisasi Time Series:** Grafik interaktif dinamis dengan batas keyakinan atas & bawah (confidence intervals), serta fitur ekspor grafik (PNG) dan data (CSV).
