@@ -4,37 +4,37 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import { Image, FileText } from "lucide-react";
 
-export default function ForecastChart({ 
-  data, 
-  showUpper = true, 
-  showLower = true, 
-  showForecast = true, 
-  showHistorical = true 
+export default function ForecastChart({
+  data,
+  showUpper = true,
+  showLower = true,
+  showForecast = true,
+  showHistorical = true
 }) {
   const canvasRef = useRef(null);
   const chartInstanceRef = useRef(null);
 
   const handleDownloadImage = () => {
     if (!canvasRef.current) return;
-    
+
     // Create a temporary canvas to draw a background color
     // This ensures white labels are readable when exported as a PNG
     const tempCanvas = document.createElement("canvas");
     tempCanvas.width = canvasRef.current.width;
     tempCanvas.height = canvasRef.current.height;
     const tempCtx = tempCanvas.getContext("2d");
-    
+
     // Fill background color
     tempCtx.fillStyle = "#0d1527"; // Matching the dark-blue theme background
     tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-    
+
     // Draw the chart on top of the solid background
     tempCtx.drawImage(canvasRef.current, 0, 0);
-    
+
     const url = tempCanvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = url;
-    
+
     const commodityName = data?.commodity ? data.commodity.replace(/\s+/g, "_").toLowerCase() : "commodity";
     link.download = `grafik_forecast_${commodityName}_${new Date().toISOString().slice(0, 10)}.png`;
     document.body.appendChild(link);
@@ -68,7 +68,7 @@ export default function ForecastChart({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    
+
     const commodityName = data?.commodity ? data.commodity.replace(/\s+/g, "_").toLowerCase() : "commodity";
     link.download = `data_forecast_${commodityName}_${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(link);
@@ -195,7 +195,7 @@ export default function ForecastChart({
             onClick: function (e, legendItem, legend) {
               const index = legendItem.datasetIndex;
               const ci = legend.chart;
-              
+
               if (ci.isDatasetVisible(index)) {
                 ci.hide(index);
                 legendItem.hidden = true;
@@ -203,7 +203,7 @@ export default function ForecastChart({
                 ci.show(index);
                 legendItem.hidden = false;
               }
-              
+
               // Find indices of relevant datasets
               const histDatasetIndex = ci.data.datasets.findIndex(
                 d => d.label === "Harga Historis (+ Data Baru)"
@@ -217,7 +217,7 @@ export default function ForecastChart({
               const lowerDatasetIndex = ci.data.datasets.findIndex(
                 d => d.label === "Batas Bawah (Minimal)"
               );
-              
+
               // Sync bounds visibility if "Proyeksi Rata-rata" is toggled
               if (forecastDatasetIndex !== -1 && index === forecastDatasetIndex) {
                 const isForecastVisible = ci.isDatasetVisible(forecastDatasetIndex);
@@ -229,7 +229,7 @@ export default function ForecastChart({
                   if (lowerDatasetIndex !== -1) ci.show(lowerDatasetIndex);
                 }
               }
-              
+
               // Auto-zoom logic based on "Harga Historis (+ Data Baru)" visibility
               if (histDatasetIndex !== -1) {
                 const isHistVisible = ci.isDatasetVisible(histDatasetIndex);
@@ -242,7 +242,7 @@ export default function ForecastChart({
                   ci.options.scales.x.min = undefined;
                 }
               }
-              
+
               ci.update();
             },
             labels: {

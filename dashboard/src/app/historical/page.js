@@ -334,7 +334,7 @@ export default function HistoricalPage() {
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div className="inline-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+              <div className="year-filter-grid">
                 <div className="form-group" style={{ marginBottom: 0 }}>
                   <label htmlFor="start-year-select" style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontSize: "0.75rem" }}>
                     Tahun Mulai
@@ -389,7 +389,7 @@ export default function HistoricalPage() {
         <main className="main-content">
           {/* Header section */}
           <header className="header-section" style={{ textAlign: "left", marginBottom: "2rem" }}>
-            <h1 className="gradient-text" style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+            <h1 className="gradient-text main-title">
               Analisis Tren Data Historis Pangan
             </h1>
             <p className="subtitle">

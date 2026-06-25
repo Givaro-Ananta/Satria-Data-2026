@@ -326,7 +326,7 @@ export default function Home() {
             Opsi A: Input Titik Data Manual
           </h3>
 
-          <div className="inline-row" style={{ marginBottom: "0.5rem", gridTemplateColumns: "1fr 1.3fr 1.3fr" }}>
+          <div className="manual-inputs-grid">
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label style={{ fontSize: "0.75rem" }}>Tahun</label>
               <select
@@ -528,7 +528,7 @@ export default function Home() {
                 <div className="spinner" style={{ borderWidth: "1.5px", width: "16px", height: "16px" }}></div>
                 Menghitung...
               </>
-            ) : "Hitung Ulang Forecast"}
+            ) : "Hitung Prediksi"}
           </button>
         </aside>
 
@@ -536,7 +536,7 @@ export default function Home() {
   <main className="main-content">
     {/* Header section */}
     <header className="header-section" style={{ textAlign: "left", marginBottom: "2rem" }}>
-      <h1 className="gradient-text" style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+      <h1 className="gradient-text main-title">
         Forecasting Harga Pangan Nasional
       </h1>
       <p className="subtitle">
@@ -572,7 +572,7 @@ export default function Home() {
               <BarChart3 size={48} style={{ margin: "0 auto 1rem auto", opacity: 0.3 }} />
               <p style={{ fontSize: "1rem", fontWeight: "600" }}>Belum Ada Data Forecast yang Dihasilkan</p>
               <p style={{ fontSize: "0.85rem", marginTop: "0.25rem" }}>
-                Silakan atur parameter di panel kiri dan klik tombol <strong>Hitung Ulang Forecast</strong>.
+                Silakan atur parameter di panel kiri dan klik tombol <strong>Hitung Prediksi</strong>.
               </p>
             </div>
           )}
@@ -608,7 +608,7 @@ export default function Home() {
               <div style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid var(--glass-border)", borderRadius: "10px", background: "rgba(15, 23, 42, 0.4)", padding: "1rem" }}>
                 <ul style={{ listStyleType: "none", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   {analysis.increases.map((item, idx) => (
-                    <li key={idx} style={{ fontSize: "0.85rem", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: idx < analysis.increases.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none", paddingBottom: "0.5rem" }}>
+                    <li key={idx} className="trend-list-item">
                       <div>
                         <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{item.date}</span>
                         <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginLeft: "0.5rem" }}>

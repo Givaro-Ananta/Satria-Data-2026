@@ -44,9 +44,9 @@ export default function Navbar() {
   return (
     <nav className="navbar-container">
       <div className="navbar-content">
-        <div className="navbar-brand" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "0.1rem" }}>
-          <span className="gradient-text brand-title" style={{ lineHeight: "1.1" }}>SD2026020000199</span>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", marginTop: "0.15rem" }}>
+        <div className="navbar-brand navbar-brand-wrapper">
+          <span className="gradient-text brand-title">SD2026020000199</span>
+          <div className="api-status-wrapper">
             <span style={{ 
               width: "6px", 
               height: "6px", 
