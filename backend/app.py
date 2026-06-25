@@ -45,6 +45,13 @@ FORECAST_HORIZON_DEFAULT = 24  # bulan ke depan
 app = FastAPI(title="Forecasting Harga Pangan API")
 
 # Konfigurasi CORS agar frontend dapat mengakses API
+
+ALLOWED_ORIGINS = [
+    "https://satria-data-2026.vercel.app",
+    "http://localhost:3000",
+]
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
