@@ -238,7 +238,7 @@ export default function HistoricalPage() {
       });
     }
 
-    return filteredPoints.reverse(); // Newest first
+    return [...filteredPoints].reverse(); // Newest first
   };
 
   const filteredTableData = getFilteredTableData();

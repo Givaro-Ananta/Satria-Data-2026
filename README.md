@@ -26,9 +26,17 @@ Satria-Data-2026/
 ├── dataset/
 │   └── wfp_food_prices_idn.csv     # Dataset harga pangan Indonesia (WFP) — via Git LFS
 │
+├── backend/                        # Backend API (FastAPI + Prophet)
+│   ├── app.py                      # Endpoint API & logika retraining model
+│   └── data/                       # Dataset baseline historis
+│
+├── dashboard/                      # Frontend Dashboard (Next.js + Chart.js)
+│   ├── src/app/                    # Halaman visualisasi & filter interaktif
+│   └── src/components/             # Komponen grafik & navigasi
+│
 └── outputs/
     ├── national_avg_clean_fixed.csv      # Data rata-rata nasional (cleaned)
-    ├── national_avg_differenced.csv      # Data setelah differencing
+    ├── national_avg_differenced.csv      # Data setelah differenced
     ├── national_avg_enriched.csv         # Data diperkaya dengan fitur tambahan
     │
     ├── figures/                    # Visualisasi hasil analisis (29 grafik)
@@ -44,6 +52,40 @@ Satria-Data-2026/
         ├── longterm_forecast_2031_2045.csv
         └── ...
 ```
+
+---
+
+## 🖥️ Interactive Dashboard (Aplikasi Prediksi & Analisis)
+
+> 🔗 **Live Demo:** https://satria-data-2026.vercel.app
+
+Aplikasi ini menyediakan antarmuka interaktif premium berbasis web untuk memvisualisasikan data historis dan melakukan prediksi harga pangan secara langsung (*real-time retraining*) menggunakan model Prophet Python di backend.
+
+### Fitur Utama:
+1. **Visualisasi Time Series:** Grafik interaktif dinamis dengan batas keyakinan atas & bawah (confidence intervals), serta fitur ekspor grafik (PNG) dan data (CSV).
+2. **Retraining Real-time (Skenario Kustom):** 
+   - **Opsi A:** Input titik data harga tambahan secara manual per bulan/tahun ke depan.
+   - **Opsi B:** Unggah dokumen CSV/Excel dengan format kolom `date` dan `price` untuk dilatih ulang langsung pada model.
+3. **Analisis Tren Otomatis:** Interpretasi naratif instan mengenai kenaikan, laju persentase perubahan harga, dan proyeksi harga rata-rata komoditas pangan.
+4. **Filter Data Historis Dinamis:** Fitur filter tahun tunggal dan rentang tahun dengan statistik ringkasan harga rata-rata, harga tertinggi/terendah, dan total persentase perubahan.
+5. **Responsif Mobile:** Tampilan antarmuka yang dioptimalkan sepenuhnya untuk perangkat smartphone (layout flex/grid adaptif, penataan navbar vertikal di layar sempit, grid kartu 2x2 untuk statistik mini).
+
+### Cara Menjalankan Aplikasi Lokal:
+
+#### 1. Jalankan Backend (FastAPI + Prophet)
+```bash
+cd backend
+# Aktifkan virtual environment Anda terlebih dahulu, kemudian jalankan:
+uvicorn app:app --reload --port 8000
+```
+
+#### 2. Jalankan Frontend (Next.js)
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+Aplikasi web dapat diakses melalui browser Anda di `http://localhost:3000`.
 
 ---
 
@@ -159,19 +201,19 @@ Dataset berasal dari **World Food Programme (WFP)**:
 
 Proyek ini menganalisis **11 komoditas pangan strategis** yang merepresentasikan kebutuhan pokok masyarakat Indonesia. Data diambil dari rata-rata nasional (*National Average*) WFP dan telah melalui proses rekonstruksi serta enrichment untuk menutup celah data yang hilang.
 
-| No | Komoditas | Kategori | Satuan | Catatan |
-|----|-----------|----------|--------|---------|
-| 1 | **Rice** *(Beras)* | Serealia & Umbi | IDR/kg | Komoditas paling strategis, diatur harga eceran tertinggi (HET) oleh pemerintah |
-| 2 | **Wheat Flour** *(Tepung Terigu)* | Serealia & Umbi | IDR/kg | Tidak ada data pasar regional — diestimasi dari tren nasional |
-| 3 | **Eggs** *(Telur Ayam)* | Daging, Ikan & Telur | IDR/kg | Indikator utama inflasi pangan; harga relatif stabil dibanding protein lain |
-| 4 | **Meat (beef)** *(Daging Sapi)* | Daging, Ikan & Telur | IDR/kg | Harga tertinggi di antara semua komoditas; dipengaruhi impor |
-| 5 | **Meat (chicken, broiler)** *(Daging Ayam)* | Daging, Ikan & Telur | IDR/kg | Sumber protein hewani terjangkau; sangat sensitif terhadap harga pakan |
-| 6 | **Milk (condensed)** *(Susu Kental Manis)* | Susu & Produk Susu | IDR/370g | Tidak ada data pasar regional — diestimasi dari tren nasional |
-| 7 | **Sugar** *(Gula Pasir)* | Makanan Lainnya | IDR/kg | Disubsidi pemerintah; tren kenaikan signifikan pasca-2022 |
-| 8 | **Oil (vegetable)** *(Minyak Goreng)* | Minyak & Lemak | IDR/liter | Mengalami krisis kelangkaan 2022; harga sangat volatil |
-| 9 | **Chili (red)** *(Cabai Merah)* | Sayur & Buah | IDR/kg | Komoditas paling volatil; sangat dipengaruhi musim dan cuaca |
-| 10 | **Chili (bird's eye)** *(Cabai Rawit)* | Sayur & Buah | IDR/kg | Volatilitas tertinggi; sering menjadi pemicu lonjakan inflasi pangan |
-| 11 | **Fuel (kerosene)** *(Minyak Tanah)* | Non-Pangan | IDR/liter | Disubsidi; relevan sebagai proxy biaya energi rumah tangga |
+| No  | Komoditas                                   | Kategori             | Satuan    | Catatan                                                                         |
+| --- | ------------------------------------------- | -------------------- | --------- | ------------------------------------------------------------------------------- |
+| 1   | **Rice** *(Beras)*                          | Serealia & Umbi      | IDR/kg    | Komoditas paling strategis, diatur harga eceran tertinggi (HET) oleh pemerintah |
+| 2   | **Wheat Flour** *(Tepung Terigu)*           | Serealia & Umbi      | IDR/kg    | Tidak ada data pasar regional — diestimasi dari tren nasional                   |
+| 3   | **Eggs** *(Telur Ayam)*                     | Daging, Ikan & Telur | IDR/kg    | Indikator utama inflasi pangan; harga relatif stabil dibanding protein lain     |
+| 4   | **Meat (beef)** *(Daging Sapi)*             | Daging, Ikan & Telur | IDR/kg    | Harga tertinggi di antara semua komoditas; dipengaruhi impor                    |
+| 5   | **Meat (chicken, broiler)** *(Daging Ayam)* | Daging, Ikan & Telur | IDR/kg    | Sumber protein hewani terjangkau; sangat sensitif terhadap harga pakan          |
+| 6   | **Milk (condensed)** *(Susu Kental Manis)*  | Susu & Produk Susu   | IDR/370g  | Tidak ada data pasar regional — diestimasi dari tren nasional                   |
+| 7   | **Sugar** *(Gula Pasir)*                    | Makanan Lainnya      | IDR/kg    | Disubsidi pemerintah; tren kenaikan signifikan pasca-2022                       |
+| 8   | **Oil (vegetable)** *(Minyak Goreng)*       | Minyak & Lemak       | IDR/liter | Mengalami krisis kelangkaan 2022; harga sangat volatil                          |
+| 9   | **Chili (red)** *(Cabai Merah)*             | Sayur & Buah         | IDR/kg    | Komoditas paling volatil; sangat dipengaruhi musim dan cuaca                    |
+| 10  | **Chili (bird's eye)** *(Cabai Rawit)*      | Sayur & Buah         | IDR/kg    | Volatilitas tertinggi; sering menjadi pemicu lonjakan inflasi pangan            |
+| 11  | **Fuel (kerosene)** *(Minyak Tanah)*        | Non-Pangan           | IDR/liter | Disubsidi; relevan sebagai proxy biaya energi rumah tangga                      |
 
 ### Catatan Preprocessing Data
 
