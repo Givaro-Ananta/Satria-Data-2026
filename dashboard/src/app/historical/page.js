@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -142,6 +143,37 @@ export default function HistoricalPage() {
       active = false;
     };
   }, [selectedCommodity, apiBaseUrl]);
+
+  const formatIndoDate = (dateStr) => {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length < 2) return dateStr;
+    const year = parts[0];
+    const month = parts[1];
+    const months = {
+      "01": "Januari",
+      "02": "Februari",
+      "03": "Maret",
+      "04": "April",
+      "05": "Mei",
+      "06": "Juni",
+      "07": "Juli",
+      "08": "Agustus",
+      "09": "September",
+      "10": "Oktober",
+      "11": "November",
+      "12": "Desember"
+    };
+    return `${months[month] || month} ${year}`;
+  };
+
+  const getLastDateStr = () => {
+    if (!historicalData || !historicalData.historical || historicalData.historical.length === 0) {
+      return "Mei 2025";
+    }
+    const lastPoint = historicalData.historical[historicalData.historical.length - 1];
+    return formatIndoDate(lastPoint.date);
+  };
 
   // Calculate statistics
   const getStats = () => {
@@ -470,7 +502,7 @@ export default function HistoricalPage() {
                 </div>
                 <div className="stats-mini-desc">
                   {filterMode === "single" ? (
-                    selectedYear === "all" ? "Sejak data awal s/d Mei 2025" : `Selama tahun ${selectedYear}`
+                    selectedYear === "all" ? `Sejak data awal s/d ${getLastDateStr()}` : `Selama tahun ${selectedYear}`
                   ) : (
                     appliedStartYear === appliedEndYear ? `Selama tahun ${appliedStartYear}` : `Periode tahun ${appliedStartYear} s/d ${appliedEndYear}`
                   )}

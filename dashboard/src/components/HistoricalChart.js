@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-import { Image, FileText } from "lucide-react";
+import { Image as ImageIcon, FileText } from "lucide-react";
 
 export default function HistoricalChart({ data }) {
   const canvasRef = useRef(null);
@@ -225,7 +225,7 @@ export default function HistoricalChart({ data }) {
             e.currentTarget.style.background = "rgba(30, 41, 59, 0.6)";
           }}
         >
-          <Image size={14} />
+          <ImageIcon size={14} />
           <span>Download PNG</span>
         </button>
         <button
