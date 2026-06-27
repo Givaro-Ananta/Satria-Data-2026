@@ -51,12 +51,12 @@ export default function Navbar() {
               width: "6px", 
               height: "6px", 
               borderRadius: "50%", 
-              background: connectionStatus.type === "success" ? "var(--accent-success)" : 
+              background: connectionStatus.type === "success" ? "#4ade80" : 
                           connectionStatus.type === "error" ? "var(--accent-danger)" : "var(--accent-secondary)",
-              boxShadow: connectionStatus.type === "success" ? "0 0 5px var(--accent-success)" : 
-                         connectionStatus.type === "error" ? "0 0 5px var(--accent-danger)" : "0 0 5px var(--accent-secondary)"
+              boxShadow: connectionStatus.type === "success" ? "0 0 6px #4ade80" : 
+                         connectionStatus.type === "error" ? "0 0 6px var(--accent-danger)" : "0 0 6px var(--accent-secondary)"
             }}></span>
-            <span style={{ fontWeight: 600, color: "var(--text-muted)", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.03em" }}>
+            <span style={{ fontWeight: 600, color: "rgba(255, 255, 255, 0.75)", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.03em" }}>
               API: {connectionStatus.message}
             </span>
           </div>

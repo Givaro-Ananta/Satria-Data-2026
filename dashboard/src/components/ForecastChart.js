@@ -118,8 +118,8 @@ export default function ForecastChart({
 
     // Grid configuration for modern premium look
     const gridConfig = {
-      color: "rgba(255, 255, 255, 0.05)",
-      borderColor: "rgba(255, 255, 255, 0.1)",
+      color: "rgba(0, 0, 0, 0.04)",
+      borderColor: "rgba(0, 0, 0, 0.08)",
     };
 
     // Dynamically build datasets list based on toggles
@@ -153,8 +153,8 @@ export default function ForecastChart({
       datasets.push({
         label: "Harga Historis (+ Data Baru)",
         data: histData,
-        borderColor: "#3b82f6",
-        backgroundColor: "#3b82f6",
+        borderColor: "#0d9488",
+        backgroundColor: "#0d9488",
         pointRadius: 2,
         pointHoverRadius: 5,
         borderWidth: 3,
@@ -256,10 +256,10 @@ export default function ForecastChart({
             },
           },
           tooltip: {
-            backgroundColor: "rgba(17, 24, 39, 0.9)",
-            titleColor: "#f9fafb",
-            bodyColor: "#d1d5db",
-            borderColor: "rgba(255, 255, 255, 0.1)",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            titleColor: "#0f172a",
+            bodyColor: "#475569",
+            borderColor: "rgba(13, 148, 136, 0.15)",
             borderWidth: 1,
             padding: 12,
             cornerRadius: 8,
@@ -296,7 +296,7 @@ export default function ForecastChart({
             min: undefined,
             grid: gridConfig,
             ticks: {
-              color: "#9ca3af",
+              color: "#475569",
               maxTicksLimit: 12,
               font: {
                 family: "Inter, system-ui, sans-serif",
@@ -307,7 +307,7 @@ export default function ForecastChart({
           y: {
             grid: gridConfig,
             ticks: {
-              color: "#9ca3af",
+              color: "#475569",
               font: {
                 family: "Inter, system-ui, sans-serif",
                 size: 11,
@@ -319,7 +319,7 @@ export default function ForecastChart({
             title: {
               display: true,
               text: "Harga (Rupiah)",
-              color: "#9ca3af",
+              color: "#475569",
               font: {
                 family: "Inter, system-ui, sans-serif",
                 size: 12,
@@ -350,7 +350,7 @@ export default function ForecastChart({
             padding: "0.4rem 0.8rem",
             fontSize: "0.8rem",
             borderRadius: "6px",
-            background: "rgba(30, 41, 59, 0.6)",
+            background: "#f1f5f9",
             border: "1px solid var(--glass-border)",
             color: "var(--text-secondary)",
             cursor: "pointer",
@@ -359,13 +359,13 @@ export default function ForecastChart({
           title="Unduh Grafik sebagai Gambar (PNG)"
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "var(--text-primary)";
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            e.currentTarget.style.background = "rgba(51, 65, 85, 0.8)";
+            e.currentTarget.style.borderColor = "rgba(16, 185, 129, 0.25)";
+            e.currentTarget.style.background = "#e2e8f0";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--text-secondary)";
             e.currentTarget.style.borderColor = "var(--glass-border)";
-            e.currentTarget.style.background = "rgba(30, 41, 59, 0.6)";
+            e.currentTarget.style.background = "#f1f5f9";
           }}
         >
           <ImageIcon size={14} />
@@ -380,7 +380,7 @@ export default function ForecastChart({
             padding: "0.4rem 0.8rem",
             fontSize: "0.8rem",
             borderRadius: "6px",
-            background: "rgba(30, 41, 59, 0.6)",
+            background: "#f1f5f9",
             border: "1px solid var(--glass-border)",
             color: "var(--text-secondary)",
             cursor: "pointer",
@@ -389,13 +389,13 @@ export default function ForecastChart({
           title="Unduh Data sebagai CSV"
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "var(--text-primary)";
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            e.currentTarget.style.background = "rgba(51, 65, 85, 0.8)";
+            e.currentTarget.style.borderColor = "rgba(16, 185, 129, 0.25)";
+            e.currentTarget.style.background = "#e2e8f0";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--text-secondary)";
             e.currentTarget.style.borderColor = "var(--glass-border)";
-            e.currentTarget.style.background = "rgba(30, 41, 59, 0.6)";
+            e.currentTarget.style.background = "#f1f5f9";
           }}
         >
           <FileText size={14} />

@@ -8,7 +8,8 @@ import {
   TrendingUp,
   TrendingDown,
   AlertCircle,
-  Filter
+  Filter,
+  Percent
 } from "lucide-react";
 import HistoricalChart from "../../components/HistoricalChart";
 
@@ -223,6 +224,18 @@ export default function HistoricalPage() {
 
   const stats = getStats();
 
+  // Helper to determine growth color class based on user request:
+  // > 70% -> merah (text-rose)
+  // 30-69% -> oranye (text-amber)
+  // < 30% -> hijau (text-emerald)
+  const getGrowthColorClass = (growthVal) => {
+    const val = Math.abs(growthVal);
+    if (val > 70) return "text-rose";
+    if (val >= 30) return "text-amber";
+    return "text-emerald";
+  };
+  const growthColorClass = getGrowthColorClass(stats.growth);
+
   // Extract available years for dropdown filtering
   const getYears = () => {
     if (!historicalData || !historicalData.historical) return [];
@@ -279,157 +292,157 @@ export default function HistoricalPage() {
     <div className="dashboard-layout">
       {/* Sidebar Controls */}
       <aside className="sidebar-panel">
-          <h2 style={{ fontSize: "1.25rem", marginBottom: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "0.75rem" }}>
-            Pilih Komoditas
-          </h2>
+        <h2 style={{ fontSize: "1.25rem", marginBottom: "1.5rem", borderBottom: "1px solid var(--glass-border)", paddingBottom: "0.75rem" }}>
+          Pilih Komoditas
+        </h2>
 
-          <div className="form-group">
-            <label htmlFor="commodity-select">Nama Komoditas</label>
-            <select
-              id="commodity-select"
-              className="form-control"
-              value={selectedCommodity}
-              onChange={(e) => {
-                setSelectedCommodity(e.target.value);
+        <div className="form-group">
+          <label htmlFor="commodity-select">Nama Komoditas</label>
+          <select
+            id="commodity-select"
+            className="form-control"
+            value={selectedCommodity}
+            onChange={(e) => {
+              setSelectedCommodity(e.target.value);
+            }}
+            disabled={initLoading || commodities.length === 0}
+          >
+            {commodities.map((item) => (
+              <option key={item} value={item}>{COMMODITY_MAP[item] || item}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="divider">Penyaringan Data</div>
+
+        {/* Mode Selector */}
+        <div className="form-group">
+          <label style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "0.5rem" }}>Mode Filter</label>
+          <div style={{ display: "flex", gap: "0.5rem", background: "#cbd5e1", padding: "0.25rem", borderRadius: "10px", border: "1px solid var(--glass-border)" }}>
+            <button
+              type="button"
+              className="btn"
+              style={{
+                flex: 1,
+                padding: "0.4rem",
+                fontSize: "0.8rem",
+                borderRadius: "8px",
+                background: filterMode === "single" ? "var(--accent-primary)" : "transparent",
+                color: filterMode === "single" ? "#ffffff" : "var(--text-secondary)",
+                boxShadow: filterMode === "single" ? "0 2px 8px rgba(16, 185, 129, 0.25)" : "none",
+                border: "none",
+                cursor: "pointer"
               }}
-              disabled={initLoading || commodities.length === 0}
+              onClick={() => setFilterMode("single")}
             >
-              {commodities.map((item) => (
-                <option key={item} value={item}>{COMMODITY_MAP[item] || item}</option>
+              Tahun Tunggal
+            </button>
+            <button
+              type="button"
+              className="btn"
+              style={{
+                flex: 1,
+                padding: "0.4rem",
+                fontSize: "0.8rem",
+                borderRadius: "8px",
+                background: filterMode === "range" ? "var(--accent-primary)" : "transparent",
+                color: filterMode === "range" ? "#ffffff" : "var(--text-secondary)",
+                boxShadow: filterMode === "range" ? "0 2px 8px rgba(16, 185, 129, 0.25)" : "none",
+                border: "none",
+                cursor: "pointer"
+              }}
+              onClick={() => setFilterMode("range")}
+            >
+              Rentang Tahun
+            </button>
+          </div>
+        </div>
+
+        {filterMode === "single" ? (
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label htmlFor="year-select" style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+              <Filter size={12} />
+              Filter Tahun
+            </label>
+            <select
+              id="year-select"
+              className="form-control"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              disabled={!historicalData}
+            >
+              <option value="all">Semua Tahun</option>
+              {availableYears.map(yr => (
+                <option key={yr} value={yr}>{yr}</option>
               ))}
             </select>
           </div>
-
-          <div className="divider">Penyaringan Data</div>
-
-          {/* Mode Selector */}
-          <div className="form-group">
-            <label style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "0.5rem" }}>Mode Filter</label>
-            <div style={{ display: "flex", gap: "0.5rem", background: "rgba(15, 23, 42, 0.4)", padding: "0.25rem", borderRadius: "10px", border: "1px solid var(--glass-border)" }}>
-              <button
-                type="button"
-                className="btn"
-                style={{
-                  flex: 1,
-                  padding: "0.4rem",
-                  fontSize: "0.8rem",
-                  borderRadius: "8px",
-                  background: filterMode === "single" ? "var(--accent-primary)" : "transparent",
-                  color: "#ffffff",
-                  boxShadow: filterMode === "single" ? "0 2px 8px rgba(59, 130, 246, 0.4)" : "none",
-                  border: "none",
-                  cursor: "pointer"
-                }}
-                onClick={() => setFilterMode("single")}
-              >
-                Tahun Tunggal
-              </button>
-              <button
-                type="button"
-                className="btn"
-                style={{
-                  flex: 1,
-                  padding: "0.4rem",
-                  fontSize: "0.8rem",
-                  borderRadius: "8px",
-                  background: filterMode === "range" ? "var(--accent-primary)" : "transparent",
-                  color: "#ffffff",
-                  boxShadow: filterMode === "range" ? "0 2px 8px rgba(59, 130, 246, 0.4)" : "none",
-                  border: "none",
-                  cursor: "pointer"
-                }}
-                onClick={() => setFilterMode("range")}
-              >
-                Rentang Tahun
-              </button>
-            </div>
-          </div>
-
-          {filterMode === "single" ? (
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label htmlFor="year-select" style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                <Filter size={12} />
-                Filter Tahun
-              </label>
-              <select
-                id="year-select"
-                className="form-control"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                disabled={!historicalData}
-              >
-                <option value="all">Semua Tahun</option>
-                {availableYears.map(yr => (
-                  <option key={yr} value={yr}>{yr}</option>
-                ))}
-              </select>
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div className="year-filter-grid">
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label htmlFor="start-year-select" style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontSize: "0.75rem" }}>
-                    Tahun Mulai
-                  </label>
-                  <select
-                    id="start-year-select"
-                    className="form-control"
-                    value={tempStartYear}
-                    onChange={(e) => handleTempStartYearChange(e.target.value)}
-                    disabled={!historicalData}
-                    style={{ fontSize: "0.85rem", padding: "0.6rem 0.8rem" }}
-                  >
-                    {/* List in ascending order for range start select */}
-                    {availableYears.slice().reverse().map(yr => (
-                      <option key={yr} value={yr}>{yr}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label htmlFor="end-year-select" style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontSize: "0.75rem" }}>
-                    Tahun Selesai
-                  </label>
-                  <select
-                    id="end-year-select"
-                    className="form-control"
-                    value={tempEndYear}
-                    onChange={(e) => setTempEndYear(e.target.value)}
-                    disabled={!historicalData}
-                    style={{ fontSize: "0.85rem", padding: "0.6rem 0.8rem" }}
-                  >
-                    {/* List in ascending order for range end select */}
-                    {availableYears.slice().reverse().map(yr => (
-                      <option key={yr} value={yr} disabled={yr < tempStartYear}>{yr}</option>
-                    ))}
-                  </select>
-                </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div className="year-filter-grid">
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label htmlFor="start-year-select" style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontSize: "0.75rem" }}>
+                  Tahun Mulai
+                </label>
+                <select
+                  id="start-year-select"
+                  className="form-control"
+                  value={tempStartYear}
+                  onChange={(e) => handleTempStartYearChange(e.target.value)}
+                  disabled={!historicalData}
+                  style={{ fontSize: "0.85rem", padding: "0.6rem 0.8rem" }}
+                >
+                  {/* List in ascending order for range start select */}
+                  {availableYears.slice().reverse().map(yr => (
+                    <option key={yr} value={yr}>{yr}</option>
+                  ))}
+                </select>
               </div>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleApplyRangeFilter}
-                disabled={!historicalData}
-                style={{ padding: "0.6rem 1rem", fontSize: "0.85rem", marginTop: "0.25rem" }}
-              >
-                Generate Grafik
-              </button>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label htmlFor="end-year-select" style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontSize: "0.75rem" }}>
+                  Tahun Selesai
+                </label>
+                <select
+                  id="end-year-select"
+                  className="form-control"
+                  value={tempEndYear}
+                  onChange={(e) => setTempEndYear(e.target.value)}
+                  disabled={!historicalData}
+                  style={{ fontSize: "0.85rem", padding: "0.6rem 0.8rem" }}
+                >
+                  {/* List in ascending order for range end select */}
+                  {availableYears.slice().reverse().map(yr => (
+                    <option key={yr} value={yr} disabled={yr < tempStartYear}>{yr}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-          )}
-        </aside>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleApplyRangeFilter}
+              disabled={!historicalData}
+              style={{ padding: "0.6rem 1rem", fontSize: "0.85rem", marginTop: "0.25rem" }}
+            >
+              Generate Grafik
+            </button>
+          </div>
+        )}
+      </aside>
 
-        {/* Main Content Area */}
-        <main className="main-content">
-          {/* Header section */}
-          <header className="header-section" style={{ textAlign: "left", marginBottom: "2rem" }}>
-            <h1 className="gradient-text main-title">
-              Analisis Tren Data Historis Pangan
-            </h1>
-            <p className="subtitle">
-              Eksplorasi Fluktuasi Harga Komoditas Berdasarkan Data World Food Programme (WFP)
-            </p>
-          </header>
+      {/* Main Content Area */}
+      <main className="main-content">
+        {/* Header section */}
+        <header className="header-section" style={{ textAlign: "left", marginBottom: "2rem" }}>
+          <h1 className="gradient-text main-title">
+            Analisis Tren Data Historis Pangan
+          </h1>
+          <p className="subtitle">
+            Eksplorasi Fluktuasi Harga Komoditas Berdasarkan Data World Food Programme (WFP)
+          </p>
+        </header>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           {/* Error Alert */}
           {errorMsg && (
             <div className="status-msg error">
@@ -445,9 +458,9 @@ export default function HistoricalPage() {
               <div className="glass-card stats-mini-card">
                 <div className="stats-mini-header">
                   <span className="stats-mini-title">Harga Rata-rata</span>
-                  <span className="stats-mini-icon text-blue" style={{ fontWeight: "800", fontSize: "1rem" }}>Rp</span>
+                  <span className="stats-mini-icon" style={{ fontWeight: "800", fontSize: "1rem", color: "var(--text-secondary)" }}>Rp</span>
                 </div>
-                <div className="stats-mini-value">
+                <div className="stats-mini-value" style={{ color: "var(--text-secondary)" }}>
                   Rp {Math.round(stats.avg).toLocaleString("id-ID")}
                 </div>
                 <div className="stats-mini-desc">
@@ -463,9 +476,9 @@ export default function HistoricalPage() {
               <div className="glass-card stats-mini-card">
                 <div className="stats-mini-header">
                   <span className="stats-mini-title">Harga Tertinggi</span>
-                  <TrendingUp size={18} className="stats-mini-icon text-amber" />
+                  <TrendingUp size={18} className="stats-mini-icon text-rose" />
                 </div>
-                <div className="stats-mini-value">
+                <div className="stats-mini-value text-rose">
                   Rp {stats.max ? stats.max.value.toLocaleString("id-ID") : "-"}
                 </div>
                 <div className="stats-mini-desc">
@@ -479,7 +492,7 @@ export default function HistoricalPage() {
                   <span className="stats-mini-title">Harga Terendah</span>
                   <TrendingDown size={18} className="stats-mini-icon text-emerald" />
                 </div>
-                <div className="stats-mini-value">
+                <div className="stats-mini-value text-emerald">
                   Rp {stats.min ? stats.min.value.toLocaleString("id-ID") : "-"}
                 </div>
                 <div className="stats-mini-desc">
@@ -491,13 +504,9 @@ export default function HistoricalPage() {
               <div className="glass-card stats-mini-card">
                 <div className="stats-mini-header">
                   <span className="stats-mini-title">Total Perubahan</span>
-                  {stats.growth >= 0 ? (
-                    <TrendingUp size={18} className="stats-mini-icon text-emerald" />
-                  ) : (
-                    <TrendingDown size={18} className="stats-mini-icon text-rose" />
-                  )}
+                  <Percent size={18} className={`stats-mini-icon ${growthColorClass}`} />
                 </div>
-                <div className="stats-mini-value" style={{ color: stats.growth >= 0 ? "var(--accent-success)" : "var(--accent-danger)" }}>
+                <div className={`stats-mini-value ${growthColorClass}`}>
                   {stats.growth >= 0 ? "+" : ""}{stats.growth.toFixed(1)}%
                 </div>
                 <div className="stats-mini-desc">
@@ -593,8 +602,8 @@ export default function HistoricalPage() {
               )}
             </div>
           )}
-          </div>
-        </main>
+        </div>
+      </main>
     </div>
   );
 }

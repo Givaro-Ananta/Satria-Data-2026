@@ -10,25 +10,25 @@ export default function HistoricalChart({ data }) {
 
   const handleDownloadImage = () => {
     if (!canvasRef.current) return;
-    
+
     // Create a temporary canvas to draw a background color
     // This ensures white labels are readable when exported as a PNG
     const tempCanvas = document.createElement("canvas");
     tempCanvas.width = canvasRef.current.width;
     tempCanvas.height = canvasRef.current.height;
     const tempCtx = tempCanvas.getContext("2d");
-    
+
     // Fill background color
     tempCtx.fillStyle = "#0d1527"; // Matching the dark-blue theme background
     tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-    
+
     // Draw the chart on top of the solid background
     tempCtx.drawImage(canvasRef.current, 0, 0);
-    
+
     const url = tempCanvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = url;
-    
+
     const commodityName = data?.commodity ? data.commodity.replace(/\s+/g, "_").toLowerCase() : "commodity";
     link.download = `grafik_historis_${commodityName}_${new Date().toISOString().slice(0, 10)}.png`;
     document.body.appendChild(link);
@@ -50,7 +50,7 @@ export default function HistoricalChart({ data }) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    
+
     const commodityName = data?.commodity ? data.commodity.replace(/\s+/g, "_").toLowerCase() : "commodity";
     link.download = `data_historis_${commodityName}_${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(link);
@@ -75,11 +75,11 @@ export default function HistoricalChart({ data }) {
 
     const ctx = canvasRef.current.getContext("2d");
 
-    // Create a beautiful premium blue gradient for the area fill
+    // Create a beautiful premium green gradient for the area fill
     const gradient = ctx.createLinearGradient(0, 0, 0, 450);
-    gradient.addColorStop(0, "rgba(59, 130, 246, 0.25)");
-    gradient.addColorStop(0.5, "rgba(59, 130, 246, 0.08)");
-    gradient.addColorStop(1, "rgba(59, 130, 246, 0.0)");
+    gradient.addColorStop(0, "rgba(13, 148, 136, 0.15)");
+    gradient.addColorStop(0.5, "rgba(13, 148, 136, 0.04)");
+    gradient.addColorStop(1, "rgba(13, 148, 136, 0.0)");
 
     chartInstanceRef.current = new Chart(ctx, {
       type: "line",
@@ -89,7 +89,7 @@ export default function HistoricalChart({ data }) {
           {
             label: "Harga Rata-rata Nasional",
             data: prices,
-            borderColor: "#3b82f6",
+            borderColor: "#0d9488",
             backgroundColor: gradient,
             fill: true,
             borderWidth: 3,
@@ -111,10 +111,10 @@ export default function HistoricalChart({ data }) {
             display: false,
           },
           tooltip: {
-            backgroundColor: "rgba(17, 24, 39, 0.95)",
-            titleColor: "#f9fafb",
-            bodyColor: "#d1d5db",
-            borderColor: "rgba(255, 255, 255, 0.1)",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            titleColor: "#0f172a",
+            bodyColor: "#475569",
+            borderColor: "rgba(13, 148, 136, 0.15)",
             borderWidth: 1,
             padding: 12,
             cornerRadius: 8,
@@ -146,11 +146,11 @@ export default function HistoricalChart({ data }) {
         scales: {
           x: {
             grid: {
-              color: "rgba(255, 255, 255, 0.03)",
-              borderColor: "rgba(255, 255, 255, 0.08)",
+              color: "rgba(0, 0, 0, 0.04)",
+              borderColor: "rgba(0, 0, 0, 0.08)",
             },
             ticks: {
-              color: "#9ca3af",
+              color: "#475569",
               maxTicksLimit: 12,
               font: {
                 family: "Inter, system-ui, sans-serif",
@@ -160,11 +160,11 @@ export default function HistoricalChart({ data }) {
           },
           y: {
             grid: {
-              color: "rgba(255, 255, 255, 0.03)",
-              borderColor: "rgba(255, 255, 255, 0.08)",
+              color: "rgba(0, 0, 0, 0.04)",
+              borderColor: "rgba(0, 0, 0, 0.08)",
             },
             ticks: {
-              color: "#9ca3af",
+              color: "#475569",
               font: {
                 family: "Inter, system-ui, sans-serif",
                 size: 11,
@@ -176,7 +176,7 @@ export default function HistoricalChart({ data }) {
             title: {
               display: true,
               text: "Harga Rata-rata (Rupiah)",
-              color: "#9ca3af",
+              color: "#475569",
               font: {
                 family: "Inter, system-ui, sans-serif",
                 size: 12,
@@ -207,7 +207,7 @@ export default function HistoricalChart({ data }) {
             padding: "0.4rem 0.8rem",
             fontSize: "0.8rem",
             borderRadius: "6px",
-            background: "rgba(30, 41, 59, 0.6)",
+            background: "#f1f5f9",
             border: "1px solid var(--glass-border)",
             color: "var(--text-secondary)",
             cursor: "pointer",
@@ -216,13 +216,13 @@ export default function HistoricalChart({ data }) {
           title="Unduh Grafik sebagai Gambar (PNG)"
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "var(--text-primary)";
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            e.currentTarget.style.background = "rgba(51, 65, 85, 0.8)";
+            e.currentTarget.style.borderColor = "rgba(16, 185, 129, 0.25)";
+            e.currentTarget.style.background = "#e2e8f0";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--text-secondary)";
             e.currentTarget.style.borderColor = "var(--glass-border)";
-            e.currentTarget.style.background = "rgba(30, 41, 59, 0.6)";
+            e.currentTarget.style.background = "#f1f5f9";
           }}
         >
           <ImageIcon size={14} />
@@ -237,7 +237,7 @@ export default function HistoricalChart({ data }) {
             padding: "0.4rem 0.8rem",
             fontSize: "0.8rem",
             borderRadius: "6px",
-            background: "rgba(30, 41, 59, 0.6)",
+            background: "#f1f5f9",
             border: "1px solid var(--glass-border)",
             color: "var(--text-secondary)",
             cursor: "pointer",
@@ -246,13 +246,13 @@ export default function HistoricalChart({ data }) {
           title="Unduh Data sebagai CSV"
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "var(--text-primary)";
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            e.currentTarget.style.background = "rgba(51, 65, 85, 0.8)";
+            e.currentTarget.style.borderColor = "rgba(16, 185, 129, 0.25)";
+            e.currentTarget.style.background = "#e2e8f0";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--text-secondary)";
             e.currentTarget.style.borderColor = "var(--glass-border)";
-            e.currentTarget.style.background = "rgba(30, 41, 59, 0.6)";
+            e.currentTarget.style.background = "#f1f5f9";
           }}
         >
           <FileText size={14} />

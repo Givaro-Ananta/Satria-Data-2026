@@ -274,7 +274,7 @@ export default function Home() {
     <div className="dashboard-layout">
       {/* Sidebar Controls */}
       <aside className="sidebar-panel">
-        <h2 style={{ fontSize: "1.25rem", marginBottom: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "0.75rem" }}>
+        <h2 style={{ fontSize: "1.25rem", marginBottom: "1.5rem", borderBottom: "1px solid var(--glass-border)", paddingBottom: "0.75rem" }}>
           Parameter Model
         </h2>
 
@@ -517,138 +517,138 @@ export default function Home() {
           )}
         </div>
 
-          <button
-            type="button"
-            onClick={handleRunForecast}
-            className="btn btn-primary"
-            disabled={loading || initLoading}
-            style={{ marginTop: "1.5rem" }}
-          >
-            {loading ? (
-              <>
-                <div className="spinner" style={{ borderWidth: "1.5px", width: "16px", height: "16px" }}></div>
-                Menghitung...
-              </>
-            ) : "Hitung Prediksi"}
-          </button>
-        </aside>
+        <button
+          type="button"
+          onClick={handleRunForecast}
+          className="btn btn-primary"
+          disabled={loading || initLoading}
+          style={{ marginTop: "1.5rem" }}
+        >
+          {loading ? (
+            <>
+              <div className="spinner" style={{ borderWidth: "1.5px", width: "16px", height: "16px" }}></div>
+              Menghitung...
+            </>
+          ) : "Hitung Prediksi"}
+        </button>
+      </aside>
 
-        {/* Main Content Area */ }
-  <main className="main-content">
-    {/* Header section */}
-    <header className="header-section" style={{ textAlign: "left", marginBottom: "2rem" }}>
-      <h1 className="gradient-text main-title">
-        Forecasting Harga Pangan Nasional
-      </h1>
-      <p className="subtitle">
-        Aplikasi Interaktif Prediksi Harga Komoditas Berbasis Machine Learning
-      </p>
-    </header>
+      {/* Main Content Area */}
+      <main className="main-content">
+        {/* Header section */}
+        <header className="header-section" style={{ textAlign: "left", marginBottom: "2rem" }}>
+          <h1 className="gradient-text main-title">
+            Forecasting Harga Pangan Nasional
+          </h1>
+          <p className="subtitle">
+            Aplikasi Interaktif Prediksi Harga Komoditas Berbasis Machine Learning
+          </p>
+        </header>
 
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-      {/* Status Message Panel */}
-      {status.message && (
-        <div className={`status-msg ${status.type}`}>
-          {status.type === "error" && <AlertCircle size={18} style={{ flexShrink: 0 }} />}
-          {status.type === "success" && <CheckCircle2 size={18} style={{ flexShrink: 0 }} />}
-          {status.type === "info" && <div className="spinner" style={{ flexShrink: 0, borderWidth: "1.5px" }}></div>}
-          <span>{status.message}</span>
-        </div>
-      )}
-
-      {/* Main Forecast Chart Card */}
-      <div className="glass-card" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <h2 style={{ fontSize: "1.25rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <BarChart3 size={20} style={{ color: "var(--accent-primary)" }} />
-          Visualisasi Prediksi Deret Waktu (Time Series)
-        </h2>
-
-        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          {forecastData ? (
-            <div style={{ width: "100%", flex: 1 }}>
-              <ForecastChart data={forecastData} />
-            </div>
-          ) : (
-            <div style={{ textAlign: "center", padding: "4rem 2rem", color: "var(--text-muted)" }}>
-              <BarChart3 size={48} style={{ margin: "0 auto 1rem auto", opacity: 0.3 }} />
-              <p style={{ fontSize: "1rem", fontWeight: "600" }}>Belum Ada Data Forecast yang Dihasilkan</p>
-              <p style={{ fontSize: "0.85rem", marginTop: "0.25rem" }}>
-                Silakan atur parameter di panel kiri dan klik tombol <strong>Hitung Prediksi</strong>.
-              </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {/* Status Message Panel */}
+          {status.message && (
+            <div className={`status-msg ${status.type}`}>
+              {status.type === "error" && <AlertCircle size={18} style={{ flexShrink: 0 }} />}
+              {status.type === "success" && <CheckCircle2 size={18} style={{ flexShrink: 0 }} />}
+              {status.type === "info" && <div className="spinner" style={{ flexShrink: 0, borderWidth: "1.5px" }}></div>}
+              <span>{status.message}</span>
             </div>
           )}
-        </div>
-      </div>
 
-      {/* Card Interpretasi Hasil Forecast */}
-      {forecastData && (() => {
-        const analysis = getInterpretation(forecastData);
-        if (!analysis) return null;
-        return (
-          <div className="glass-card" style={{ padding: "1.75rem" }}>
-            <h3 style={{ fontSize: "1.2rem", display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-              <TrendingUp size={20} style={{ color: "var(--accent-secondary)" }} />
-              Interpretasi Hasil & Penjelasan Tren Harga
-            </h3>
+          {/* Main Forecast Chart Card */}
+          <div className="glass-card" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <h2 style={{ fontSize: "1.25rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <BarChart3 size={20} style={{ color: "var(--accent-primary)" }} />
+              Visualisasi Prediksi Deret Waktu (Time Series)
+            </h2>
 
-            {/* Ringkasan Tren Utama */}
-            <p style={{ fontSize: "0.95rem", color: "var(--text-primary)", lineHeight: "1.6", marginBottom: "1.5rem" }}>
-              Berdasarkan proyeksi model, harga komoditas <strong>{COMMODITY_MAP[forecastData.commodity] || forecastData.commodity}</strong> diperkirakan <strong>{analysis.trendText}</strong> sebesar <strong>{Math.abs(analysis.percentChange)}%</strong> dalam <strong>{horizon} bulan</strong> ke depan.
-              Harga diproyeksikan berubah dari <strong>Rp {analysis.startPrice.toLocaleString("id-ID")}</strong> (pada {analysis.startMonth}) menjadi <strong>Rp {analysis.endPrice.toLocaleString("id-ID")}</strong> (pada {analysis.endMonth}).
-              {analysis.maxIncrease && (
-                <span> Kenaikan bulanan tertinggi diprediksi terjadi pada bulan <strong>{analysis.maxIncrease.date}</strong> dengan lonjakan sebesar <strong>+Rp {analysis.maxIncrease.increaseVal.toLocaleString("id-ID")}</strong> ({analysis.maxIncrease.increasePct}%).</span>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              {forecastData ? (
+                <div style={{ width: "100%", flex: 1 }}>
+                  <ForecastChart data={forecastData} />
+                </div>
+              ) : (
+                <div style={{ textAlign: "center", padding: "4rem 2rem", color: "var(--text-muted)" }}>
+                  <BarChart3 size={48} style={{ margin: "0 auto 1rem auto", opacity: 0.3 }} />
+                  <p style={{ fontSize: "1rem", fontWeight: "600" }}>Belum Ada Data Forecast yang Dihasilkan</p>
+                  <p style={{ fontSize: "0.85rem", marginTop: "0.25rem" }}>
+                    Silakan atur parameter di panel kiri dan klik tombol <strong>Hitung Prediksi</strong>.
+                  </p>
+                </div>
               )}
-            </p>
-
-            {/* Detail Kenaikan Harga Per Bulan */}
-            <h4 style={{ fontSize: "0.95rem", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              Informasi Kenaikan Harga Bulanan
-            </h4>
-
-            {analysis.increases.length > 0 ? (
-              <div style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid var(--glass-border)", borderRadius: "10px", background: "rgba(15, 23, 42, 0.4)", padding: "1rem" }}>
-                <ul style={{ listStyleType: "none", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                  {analysis.increases.map((item, idx) => (
-                    <li key={idx} className="trend-list-item">
-                      <div>
-                        <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{item.date}</span>
-                        <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginLeft: "0.5rem" }}>
-                          (dibandingkan {item.prevMonth})
-                        </span>
-                      </div>
-                      <div style={{ textAlign: "right" }}>
-                        <span style={{ color: "var(--accent-secondary)", fontWeight: 600, marginRight: "1rem" }}>
-                          +Rp {item.increaseVal.toLocaleString("id-ID")} (+{item.increasePct}%)
-                        </span>
-                        <span style={{ color: "var(--text-secondary)", fontFamily: "monospace" }}>
-                          Rp {item.price.toLocaleString("id-ID")}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <p style={{ fontSize: "0.85rem", color: "var(--accent-success)" }}>
-                Tidak ada prediksi kenaikan harga pangan pada komoditas ini selama horizon proyeksi. Harga cenderung stabil atau menurun.
-              </p>
-            )}
+            </div>
           </div>
-        );
-      })()}
 
-      {/* Info Card */}
-      <div className="glass-card" style={{ padding: "1.5rem" }}>
-        <h3 style={{ fontSize: "1rem", display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
-          <HelpCircle size={16} style={{ color: "var(--accent-secondary)" }} />
-          Bagaimana ini bekerja?
-        </h3>
-        <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: "1.6" }}>
-          Aplikasi ini memuat data historis harga pangan nasional. Ketika Anda menambahkan data baru secara manual atau mengunggah CSV, data tersebut akan digabungkan dengan dataset historis di backend Python. Model <strong>machine learning</strong> akan dilatih ulang secara instan menggunakan data yang diperbarui tersebut untuk menghasilkan ramalan (forecast) harga pangan hingga {horizon} bulan ke depan lengkap dengan batas interval kepercayaan.
-        </p>
-      </div>
-      </div>
-  </main>
+          {/* Card Interpretasi Hasil Forecast */}
+          {forecastData && (() => {
+            const analysis = getInterpretation(forecastData);
+            if (!analysis) return null;
+            return (
+              <div className="glass-card" style={{ padding: "1.75rem" }}>
+                <h3 style={{ fontSize: "1.2rem", display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                  <TrendingUp size={20} style={{ color: "var(--accent-secondary)" }} />
+                  Interpretasi Hasil & Penjelasan Tren Harga
+                </h3>
+
+                {/* Ringkasan Tren Utama */}
+                <p style={{ fontSize: "0.95rem", color: "var(--text-primary)", lineHeight: "1.6", marginBottom: "1.5rem" }}>
+                  Berdasarkan proyeksi model, harga komoditas <strong>{COMMODITY_MAP[forecastData.commodity] || forecastData.commodity}</strong> diperkirakan <strong>{analysis.trendText}</strong> sebesar <strong>{Math.abs(analysis.percentChange)}%</strong> dalam <strong>{horizon} bulan</strong> ke depan.
+                  Harga diproyeksikan berubah dari <strong>Rp {analysis.startPrice.toLocaleString("id-ID")}</strong> (pada {analysis.startMonth}) menjadi <strong>Rp {analysis.endPrice.toLocaleString("id-ID")}</strong> (pada {analysis.endMonth}).
+                  {analysis.maxIncrease && (
+                    <span> Kenaikan bulanan tertinggi diprediksi terjadi pada bulan <strong>{analysis.maxIncrease.date}</strong> dengan lonjakan sebesar <strong>+Rp {analysis.maxIncrease.increaseVal.toLocaleString("id-ID")}</strong> ({analysis.maxIncrease.increasePct}%).</span>
+                  )}
+                </p>
+
+                {/* Detail Kenaikan Harga Per Bulan */}
+                <h4 style={{ fontSize: "0.95rem", fontWeight: "600", color: "var(--text-secondary)", marginBottom: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  Informasi Kenaikan Harga Bulanan
+                </h4>
+
+                {analysis.increases.length > 0 ? (
+                  <div style={{ maxHeight: "250px", overflowY: "auto", border: "1px solid var(--glass-border)", borderRadius: "10px", background: "#f1f5f9", padding: "1rem" }}>
+                    <ul style={{ listStyleType: "none", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                      {analysis.increases.map((item, idx) => (
+                        <li key={idx} className="trend-list-item">
+                          <div>
+                            <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{item.date}</span>
+                            <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginLeft: "0.5rem" }}>
+                              (dibandingkan {item.prevMonth})
+                            </span>
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <span style={{ color: "var(--accent-secondary)", fontWeight: 600, marginRight: "1rem" }}>
+                              +Rp {item.increaseVal.toLocaleString("id-ID")} (+{item.increasePct}%)
+                            </span>
+                            <span style={{ color: "var(--text-secondary)", fontFamily: "monospace" }}>
+                              Rp {item.price.toLocaleString("id-ID")}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <p style={{ fontSize: "0.85rem", color: "var(--accent-success)" }}>
+                    Tidak ada prediksi kenaikan harga pangan pada komoditas ini selama horizon proyeksi. Harga cenderung stabil atau menurun.
+                  </p>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Info Card */}
+          <div className="glass-card" style={{ padding: "1.5rem" }}>
+            <h3 style={{ fontSize: "1rem", display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+              <HelpCircle size={16} style={{ color: "var(--accent-secondary)" }} />
+              Bagaimana ini bekerja?
+            </h3>
+            <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: "1.6" }}>
+              Aplikasi ini memuat data historis harga pangan nasional. Ketika Anda menambahkan data baru secara manual atau mengunggah CSV, data tersebut akan digabungkan dengan dataset historis di backend Python. Model <strong>machine learning</strong> akan dilatih ulang secara instan menggunakan data yang diperbarui tersebut untuk menghasilkan ramalan (forecast) harga pangan hingga {horizon} bulan ke depan lengkap dengan batas interval kepercayaan.
+            </p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
