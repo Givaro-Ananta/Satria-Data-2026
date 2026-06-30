@@ -2,6 +2,9 @@
 
 > **Analisis deret waktu dan prediksi harga komoditas pangan nasional Indonesia menggunakan SARIMA, ETS, dan Prophet (2026–2045)**
 
+> [!NOTE]
+> Hasil paper / naskah esai lengkap untuk kompetisi ini dapat diakses pada file [SEC_(SD2026020000199).pdf](SEC_(SD2026020000199).pdf).
+
 ---
 
 ## 📌 Deskripsi Proyek
@@ -19,6 +22,9 @@ Tiga model utama digunakan dan dibandingkan performanya:
 
 ```
 Satria-Data-2026/
+│
+├── SEC_(SD2026020000199).pdf         # Naskah esai / paper hasil penelitian
+├── SEC_Orisinalitas_(SD2026020000199).pdf # Surat pernyataan orisinalitas
 │
 ├── Code/
 │   └── code.ipynb                  # Notebook utama: EDA, modeling, dan forecasting
